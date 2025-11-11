@@ -32,10 +32,15 @@ def create_web_blueprint(client):
                     today=today
                 )
 
+            # Walidacja danych wejściowych
             if not dish_name:
                 error_msg = "Podaj nazwę potrawy!"
             elif not amount.isdigit():
                 error_msg = "Ilość musi być liczbą!"
+            elif int(amount) <= 0:
+                error_msg = "Ilość musi być większa od 0!"
+            elif int(amount) > 10000:
+                error_msg = "Ilość nie może przekraczać 10000g!"
             else:
                 try:
                     datetime.strptime(date, "%Y-%m-%d")
@@ -51,34 +56,45 @@ def create_web_blueprint(client):
                     today=today
                 )
 
-            print(f"\n{'=' * 50}")
-            print(f"Odebrano dane: {dish_name}, {amount} g, {date}")
-            print(f"{'=' * 50}\n")
+            amount_int = int(amount)
 
-            # Analiza potrawy
-            data = analyze_dish(client, dish_name)
+            print(f"\n{'=' * 60}")
+            print(f"📥 [FORMULARZ] Odebrano dane:")
+            print(f"   • Potrawa: {dish_name}")
+            print(f"   • Ilość: {amount_int}g")
+            print(f"   • Data: {date}")
+            print(f"{'=' * 60}")
+
+            # Analiza potrawy z uwzględnieniem gramatury
+            data = analyze_dish(client, dish_name, amount_int)
 
             chart_error = False
             chart_path = None
 
             if data is None:
-                print("Nie udało się pobrać danych.")
+                print("❌ [BŁĄD] Nie udało się pobrać danych z API")
+                error_msg = "Nie udało się przeanalizować potrawy. Spróbuj ponownie."
                 chart_error = True
             else:
-                chart_path = create_chart(dish_name, data)
+                # Generowanie wykresu
+                chart_path = create_chart(dish_name, data, amount_int)
+
+                if chart_path is None:
+                    print("⚠️  [OSTRZEŻENIE] Nie udało się wygenerować wykresu")
+                    chart_error = True
 
                 # ZAPIS DO DZIENNIKA
                 save_success = add_meal(
                     dish_name=dish_name,
-                    amount=int(amount),
+                    amount=amount_int,
                     date=date,
                     nutrition_data=data
                 )
 
                 if save_success:
-                    print(" Posiłek zapisany w dzienniku!")
+                    print(f"✅ [DZIENNIK] Posiłek zapisany pomyślnie!")
                 else:
-                    print(" Nie udało się zapisać posiłku w dzienniku")
+                    print(f"❌ [DZIENNIK] Nie udało się zapisać posiłku")
 
             submitted = True
 
