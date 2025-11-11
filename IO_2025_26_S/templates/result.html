@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiza - SmartDiet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            overflow-y: auto !important;
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4, p, label, span, div {
+            overflow: visible !important;
+            line-height: 1.6 !important;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(-45deg); }
+            50% { transform: scale(1.2) rotate(-45deg); }
+            100% { transform: scale(1) rotate(-45deg); }
+        }
+        .checkmark-animation {
+            animation: checkmark 0.6s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 min-h-screen pb-12">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header with Success Icon -->
+        <div class="text-center mb-8 animate-fade-in">
+            <!-- Success Badge -->
+            <div class="mb-6 flex justify-center">
+                <div class="relative">
+                    <div class="w-32 h-32 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center shadow-2xl">
+                        <svg class="w-20 h-20 text-green-500 checkmark-animation" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <!-- Sparkle effect -->
+                    <div class="absolute -top-1 -right-1 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-xl">✨</div>
+                </div>
+            </div>
+
+            <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2 leading-tight py-2">
+                Wynik Analizy
+            </h1>
+            <h2 class="text-3xl font-semibold text-gray-800 leading-relaxed py-1">{{ dish }}</h2>
+        </div>
+
+        <!-- Info Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 animate-fade-in">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-purple-100 rounded-full p-4">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-600 leading-relaxed py-1">Ilość</div>
+                        <div class="text-2xl font-bold text-gray-800 leading-relaxed py-1">{{ amount }} g</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="bg-blue-100 rounded-full p-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-sm text-gray-600 leading-relaxed py-1">Data</div>
+                        <div class="text-2xl font-bold text-gray-800 leading-relaxed py-1">{{ date }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success/Error Message -->
+            {% if error_msg %}
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
+                    <p class="font-semibold leading-relaxed py-1">{{ error_msg }}</p>
+                </div>
+            {% else %}
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="font-semibold leading-relaxed py-1">✅ Dane zostały poprawnie dodane i zapisane w dzienniku!</span>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Chart -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 animate-fade-in">
+            {% if chart_error %}
+                <div class="text-center py-12">
+                    <svg class="w-16 h-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <p class="text-red-600 font-semibold leading-relaxed py-1">Nie udało się wygenerować wykresu</p>
+                    <p class="text-gray-500 text-sm mt-2 leading-relaxed py-1">Brak połączenia z API</p>
+                </div>
+            {% else %}
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center leading-relaxed py-2">Wykres Mikroskładników</h3>
+                <div class="flex justify-center">
+                    <img src="{{ chart_path }}" alt="Wykres mikroskładników" class="rounded-xl shadow-lg max-w-full">
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Nutrition Data -->
+        {% if data %}
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-6 animate-fade-in">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 leading-relaxed py-2">Podsumowanie Mikroskładników</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for key, value in data.items() %}
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-2 border-purple-100 hover:border-purple-300 transition-colors">
+                    <div class="text-sm text-gray-600 mb-1 leading-relaxed py-1">{{ key }}</div>
+                    <div class="text-xl font-bold text-gray-800 leading-relaxed py-1">{{ value }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap gap-4 justify-center animate-fade-in">
+            <a
+                href="{{ url_for('web_bp.home') }}"
+                class="flex items-center bg-gray-600 hover:bg-gray-700 text-white font-semibold py-4 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg leading-relaxed"
+            >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span class="leading-relaxed py-1">Wróć do formularza</span>
+            </a>
+
+            <a
+                href="{{ url_for('web_bp.diary') }}"
+                class="flex items-center bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg leading-relaxed"
+            >
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <span class="leading-relaxed py-1">Zobacz dziennik</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+[
+    {
+        "id": 1,
+        "dish_name": "jajecznica",
+        "amount": 400,
+        "date": "2025-11-08",
+        "nutrition_data": {
+            "Magnez": 10,
+            "Żelazo": 1.2,
+            "Witamina D": 2,
+            "Wapń": 50,
+            "Cynk": 0.8,
+            "Potas": 130
+        },
+        "created_at": "2025-11-08 17:36:22"
+    },
+    {
+        "id": 2,
+        "dish_name": "zupa z pomidorami",
+        "amount": 454,
+        "date": "2025-11-08",
+        "nutrition_data": {
+            "Magnez": 110,
+            "Żelazo": 2.5,
+            "Witamina D": 4,
+            "Wapń": 220,
+            "Cynk": 1.8
+        },
+        "created_at": "2025-11-08 17:37:06"
+    },
+    {
+        "id": 3,
+        "dish_name": "ryż",
+        "amount": 200,
+        "date": "2025-11-09",
+        "nutrition_data": {
+            "Magnez": 25,
+            "Żelazo": 0.8,
+            "Wapń": 10,
+            "Cynk": 1.2,
+            "Potas": 115
+        },
+        "created_at": "2025-11-09 18:51:43"
+    },
+    {
+        "id": 6,
+        "dish_name": "makaron carbonara",
+        "amount": 400,
+        "date": "2025-11-08",
+        "nutrition_data": {
+            "Magnez": 50,
+            "Żelazo": 1.5,
+            "Witamina D": 1,
+            "Wapń": 70,
+            "Cynk": 1
+        },
+        "created_at": "2025-11-09 19:06:00"
+    },
+    {
+        "id": 5,
+        "dish_name": "jajecznica z szynką",
+        "amount": 250,
+        "date": "2025-11-09",
+        "nutrition_data": {
+            "Magnez": 10,
+            "Żelazo": 1.5,
+            "Witamina D": 2,
+            "Wapń": 50,
+            "Cynk": 1,
+            "Potas": 150
+        },
+        "created_at": "2025-11-09 19:20:05"
+    }
+]

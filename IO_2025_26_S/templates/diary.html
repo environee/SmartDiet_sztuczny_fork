@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dziennik - SmartDiet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            overflow-y: auto !important;
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4, p, label, span, div {
+            overflow: visible !important;
+            line-height: 1.6 !important;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 min-h-screen pb-12">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header with Icon -->
+        <div class="mb-8">
+            <a
+                href="{{ url_for('web_bp.home') }}"
+                class="inline-flex items-center text-purple-600 hover:text-purple-700 font-semibold mb-6 transition-colors group leading-relaxed"
+            >
+                <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                <span class="leading-relaxed py-1">Wróć do formularza</span>
+            </a>
+
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2 leading-tight py-2">
+                        📚 Dziennik Żywieniowy
+                    </h1>
+                    <p class="text-gray-600 leading-relaxed py-1">Historia Twoich posiłków i statystyki</p>
+                </div>
+
+                <!-- Decorative illustration -->
+                <div class="hidden md:block">
+                    <div class="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center float-animation">
+                        <span class="text-5xl">📖</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statystyki -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 animate-slide-in">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center leading-relaxed py-2">Twoje Statystyki</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white text-center transform hover:scale-105 transition-transform">
+                    <div class="text-5xl font-bold mb-2 leading-relaxed py-1">{{ stats.total_meals }}</div>
+                    <div class="text-purple-100 leading-relaxed py-1">Zapisanych posiłków</div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white text-center transform hover:scale-105 transition-transform">
+                    <div class="text-5xl font-bold mb-2 leading-relaxed py-1">{{ stats.unique_days }}</div>
+                    <div class="text-blue-100 leading-relaxed py-1">Dni z wpisami</div>
+                </div>
+
+                {% if stats.date_range and stats.date_range.first %}
+                <div class="bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl p-6 text-white text-center transform hover:scale-105 transition-transform">
+                    <div class="text-2xl font-bold mb-2 leading-relaxed py-1">{{ stats.date_range.first }}</div>
+                    <div class="text-pink-100 leading-relaxed py-1">Pierwszy wpis</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Lista posiłków -->
+        {% if meals %}
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 leading-relaxed py-2">Historia Posiłków</h2>
+            </div>
+
+            <div class="space-y-4">
+                {% for meal in meals %}
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow p-6 animate-slide-in">
+                    <!-- Header -->
+                    <div class="flex flex-wrap justify-between items-start mb-4 gap-4">
+                        <h3 class="text-2xl font-bold text-gray-800 leading-relaxed py-1">{{ meal.dish_name }}</h3>
+                        <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                            📅 {{ meal.date }}
+                        </span>
+                    </div>
+
+                    <!-- Szczegóły -->
+                    <div class="flex flex-wrap gap-6 mb-4 text-gray-600">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-2">⚖️</span>
+                            <span class="leading-relaxed py-1"><strong class="text-gray-800">{{ meal.amount }}</strong> g</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-2">🕐</span>
+                            <span class="leading-relaxed py-1">{{ meal.created_at }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Mikroskładniki -->
+                    {% if meal.nutrition_data %}
+                    <div class="border-t border-gray-200 pt-4 mt-4">
+                        <h4 class="text-sm font-semibold text-gray-700 mb-3 leading-relaxed py-1">Mikroskładniki:</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                            {% for key, value in meal.nutrition_data.items() %}
+                            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-100">
+                                <div class="text-xs text-gray-600 mb-1 leading-relaxed py-1">{{ key }}</div>
+                                <div class="font-bold text-gray-800 leading-relaxed py-1">{{ value }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Przycisk usuń -->
+                    <form
+                        method="POST"
+                        action="{{ url_for('web_bp.delete_meal_route', meal_id=meal.id) }}"
+                        class="mt-4"
+                        onsubmit="return confirm('Czy na pewno chcesz usunąć ten posiłek?');"
+                    >
+                        <button
+                            type="submit"
+                            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center leading-relaxed"
+                        >
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                            <span class="leading-relaxed py-1">Usuń posiłek</span>
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <!-- Pusty stan z ilustracją -->
+            <div class="bg-white rounded-2xl shadow-xl p-12 text-center relative overflow-hidden">
+                <!-- Background decoration -->
+                <div class="absolute top-0 left-0 w-full h-full opacity-5">
+                    <div class="text-9xl absolute top-4 left-4">🍽️</div>
+                    <div class="text-9xl absolute bottom-4 right-4">🥗</div>
+                    <div class="text-9xl absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">🍴</div>
+                </div>
+
+                <div class="relative z-10">
+                    <div class="mb-6 inline-block">
+                        <div class="w-32 h-32 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full flex items-center justify-center mx-auto shadow-lg float-animation">
+                            <span class="text-7xl">📭</span>
+                        </div>
+                    </div>
+
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4 leading-relaxed py-2">Brak zapisanych posiłków</h2>
+                    <p class="text-gray-600 mb-8 text-lg leading-relaxed py-1">Dodaj swój pierwszy posiłek, aby rozpocząć dziennik!</p>
+
+                    <a
+                        href="{{ url_for('web_bp.home') }}"
+                        class="inline-flex items-center bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-4 px-8 rounded-xl hover:shadow-lg transform hover:scale-105 transition-all leading-relaxed"
+                    >
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        <span class="leading-relaxed py-1">Dodaj pierwszy posiłek</span>
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

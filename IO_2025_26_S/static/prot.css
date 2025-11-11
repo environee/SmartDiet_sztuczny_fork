@@ -1,0 +1,131 @@
+*{
+    box-sizing: border-box;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+}
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #147521;
+}
+h1:first-child{
+    margin-top: 0;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #fff3b8;
+    font-size: 300%;
+}
+main{
+    width: inherit;
+    height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+main form{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 3%;
+}
+
+h1 i{
+    color: #55bfd6;
+}
+
+#dish input[type=text].no-anim {
+    animation: none !important;
+}
+
+#dish input[type=text] {
+    background-color: #147521;
+    border: none;
+    border-bottom: 2px solid #fff3b8;
+    color: #fff3b8;
+    margin-bottom: 15%;
+    font-size: medium;
+}
+
+#dish input[type=text]::placeholder {
+    color: #fff3b8;
+    transition: color 0s linear 0.3s;
+}
+
+#dish input[type=text]:focus::placeholder {
+    color: transparent;
+    transition: none;
+}
+
+@keyframes focusGrow {
+    0% {
+        border-bottom-color: #fff3b8;
+        color: #fff3b8;
+        font-size: medium;
+    }
+    100% {
+        border-bottom-color: #55bfd6;
+        color: #55bfd6;
+        font-size: x-large;
+    }
+}
+
+@keyframes focusShrink {
+    0% {
+        border-bottom-color: #55bfd6;
+        color: #55bfd6;
+        font-size: x-large;
+    }
+    100% {
+        border-bottom-color: #fff3b8;
+        color: #fff3b8;
+        font-size: medium;
+    }
+}
+
+#dish input[type=text]:focus:not(.no-anim) {
+    outline: none;
+    animation: focusGrow 0.3s forwards;
+}
+
+#dish input[type=text]:not(:focus):not(.no-anim) {
+    animation: focusShrink 0.3s forwards;
+}
+
+@keyframes fadeInMain {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+main {
+    animation: fadeInMain 1s ease forwards;
+    opacity: 0;
+}
+
+#dish input[type=submit]{
+    background-color: #147521;
+    color: #fff3b8;
+    border-color: #fff3b8;
+    font-size: medium;
+    cursor: auto;
+}
+
+#dish input[type=submit]:hover{
+    cursor: pointer;
+}
+
+#dish input[type=submit]:active{
+    color:#55bfd6;
+    border-color: #55bfd6;
+}
+
+h4{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #fff3b8;
+}
